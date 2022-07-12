@@ -19,7 +19,7 @@ public:
 	while (que.size() != 0) {
 		unsigned long long int left = que.front().second, right = 0;
 		int size = que.size();
-		while (size-- > 0) {
+		while (size--) {
 			pair<TreeNode*, unsigned long long int> rNode = que.front();
 			que.pop();
 			right = rNode.second;
