@@ -1,23 +1,30 @@
 class Solution {
-    bool isPalindrome(const string& s, int lo, int hi) {
-        while (lo < hi) {
-            if (s[lo] != s[hi])
-                return false;
-
-            ++lo;
-            --hi;
-        }
-
-        return true;
-    }
-
  public:
     int countSubstrings(string s) {
-        int ans = 0;
+        int n = s.size(), ans = 0;
 
-        for (int lo = 0; lo < s.size(); ++lo)
-            for (int hi = lo; hi < s.size(); ++hi)
-                ans += isPalindrome(s, lo, hi);
+        if (n <= 0)
+            return 0;
+
+        bool dp[n][n];
+        fill_n(*dp, n * n, false);
+
+        // Base case: single letter substrings
+        for (int i = 0; i < n; ++i, ++ans)
+            dp[i][i] = true;
+
+        // Base case: double letter substrings
+        for (int i = 0; i < n - 1; ++i) {
+            dp[i][i + 1] = (s[i] == s[i + 1]);
+            ans += dp[i][i + 1];
+        }
+
+        // All other cases: substrings of length 3 to n
+        for (int len = 3; len <= n; ++len)
+            for (int i = 0, j = i + len - 1; j < n; ++i, ++j) {
+                dp[i][j] = dp[i + 1][j - 1] && (s[i] == s[j]);
+                ans += dp[i][j];
+            }
 
         return ans;
     }
