@@ -1,7 +1,7 @@
 class Solution {
 public:
    bool isPresent(const string &s, const vector<string> &words, unordered_set<string> &st)
-{
+    {
     int n = s.size();
 
     for (int i = 1; i <= n; i++)
