@@ -1,28 +1,45 @@
 class Solution {
 public:
-    bool iscycle(vector<int> adj[],vector<int> &vis,int id){
-        if(vis[id]==1)
-            return true;
-        if(vis[id]==0){
-            vis[id]=1;
-            for(auto edge : adj[id]){
-                if(iscycle(adj,vis,edge))
-                    return true;
+    vector<int> adj[2002];
+    int state[2002];
+    bool ok;
+    void dfs(int u)
+    {
+        if(state[u]==1)
+        {
+            ok=false;
+            return;
+        }
+        state[u]=1;
+        for(auto v:adj[u])
+        {
+            if(state[v]!=2)
+            {
+                dfs(v);
             }
         }
-        vis[id] = 2;
-        return false;
+        state[u]=2;
     }
-    bool canFinish(int n, vector<vector<int>>& pre) {
-        vector<int> adj[n];
-        for(auto edge : pre)
-            adj[edge[1]].push_back(edge[0]);
-        vector<int> vis(n,0);
-        
-        for(int i=0;i<n;i++){
-            if(iscycle(adj,vis,i))
-                return false;
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        for(int i=0;i<numCourses;++i)
+        {
+            state[i]=0;
+            adj[i].clear();
         }
-        return true;
+        ok=true;
+        int m=prerequisites.size();
+        for(int i=0;i<m;++i)
+        {
+            int u=prerequisites[i][0],v=prerequisites[i][1];
+            adj[v].push_back(u);
+        }
+        for(int i=0;i<numCourses;++i)
+        {
+            if(state[i]==0)
+            {
+                dfs(i);
+            }
+        }
+        return ok;
     }
 };
