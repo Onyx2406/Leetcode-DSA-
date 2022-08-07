@@ -1,27 +1,32 @@
 class Solution {
- public:
-  long long minimalKSum(vector<int>& nums, int k) {
-    long long ans = 0;
-    nums.push_back(0);
-    sort(begin(nums), end(nums));
-
-    for (int i = 0; i + 1 < nums.size(); ++i) {
-      if (nums[i] == nums[i + 1])
-        continue;
-      const int l = nums[i] + 1;
-      const int r = min(nums[i] + k, nums[i + 1] - 1);
-      ans += static_cast<long long>(l + r) * (r - l + 1) / 2;
-      k -= r - l + 1;
-      if (k == 0)
-        return ans;
+public:
+    long long minimalKSum(vector<int>& nums, int k) {
+       
+        // Sort the nums array
+        sort(nums.begin(),nums.end());
+        
+        // get the sum of 1 to K 
+        long long sum = ((long long)k * (long long)(k+1)) /2;
+        
+        // current unique number
+        int curr = k + 1;
+        
+        // loop through array and deduce the numbers which occurs only once
+        // and add the next unique number curr and increment curr
+        for(int i=0;i<nums.size();i++)
+        {
+            // break when current unique number is less or equal nums[i]
+            // cause in this case all unique numbers have been taken in to sum
+            if(curr<=nums[i])break;
+            
+            // check if current number occurs only once
+            if(i>0 && nums[i-1]==nums[i])continue;
+            
+            sum -= nums[i];
+            sum += curr;
+            curr++;
+        }
+        
+        return sum;
     }
-
-    if (k > 0) {
-      const int l = nums.back() + 1;
-      const int r = nums.back() + k;
-      ans += static_cast<long long>(l + r) * (r - l + 1) / 2;
-    }
-
-    return ans;
-  }
 };
