@@ -15,13 +15,11 @@ public:
             if(arr1[i] <= arr2[j])ans[mainIndex++] = arr1[i++];
             else ans[mainIndex++] = arr2[j++];
         }
-        
-        while( i < n){
-            ans[mainIndex++] = arr1[i++];
-        }
-        
         while( j < m){
             ans[mainIndex++] = arr2[j++];
+        }
+        while( i < n){
+            ans[mainIndex++] = arr1[i++];
         }
         return ans;
     }
