@@ -1,45 +1,35 @@
 class Solution {
-public:
-    vector<int> adj[2002];
-    int state[2002];
-    bool ok;
-    void dfs(int u)
+    bool isCyclic(vector<vector<int>>& adj,vector<int>& visited,int curr)
     {
-        if(state[u]==1)
-        {
-            ok=false;
-            return;
-        }
-        state[u]=1;
-        for(auto v:adj[u])
-        {
-            if(state[v]!=2)
-            {
-                dfs(v);
-            }
-        }
-        state[u]=2;
+        if(visited[curr]==2)
+            return true;
+        
+        visited[curr] = 2;
+        for(int i=0;i<adj[curr].size();++i)
+            if(visited[adj[curr][i]]!=1)
+                if(isCyclic(adj,visited,adj[curr][i]))
+                    return true;
+        
+        visited[curr] = 1;
+        return false;
     }
+public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+        cout.tie(NULL);
+        
+        vector<vector<int>> adj(numCourses);
+        //Make adjacency matrix (Directed graph)
+        for(int i=0;i<prerequisites.size();++i)
+            adj[prerequisites[i][0]].push_back(prerequisites[i][1]);
+        
+        vector<int> visited(numCourses,0);
         for(int i=0;i<numCourses;++i)
-        {
-            state[i]=0;
-            adj[i].clear();
-        }
-        ok=true;
-        int m=prerequisites.size();
-        for(int i=0;i<m;++i)
-        {
-            int u=prerequisites[i][0],v=prerequisites[i][1];
-            adj[v].push_back(u);
-        }
-        for(int i=0;i<numCourses;++i)
-        {
-            if(state[i]==0)
-            {
-                dfs(i);
-            }
-        }
-        return ok;
+            if(visited[i]==0)
+                if(isCyclic(adj,visited,i))
+                    return false;
+        
+        return true;
     }
 };
