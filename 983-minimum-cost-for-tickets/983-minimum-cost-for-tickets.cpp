@@ -1,6 +1,6 @@
 class Solution {
 public:
-       int dp[366];
+    int dp[366];
     
     bool travel(vector<int>& days,int d)
     {
